@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
-PULSE_DIR="/app/.apt/usr/lib/x86_64-linux-gnu/pulseaudio"
-if [ -d "$PULSE_DIR" ]; then
-  export LD_LIBRARY_PATH="$PULSE_DIR:${LD_LIBRARY_PATH:-}"
-fi
+add_libdir () {
+  if [ -d "$1" ]; then
+    export LD_LIBRARY_PATH="$1:${LD_LIBRARY_PATH:-}"
+  fi
+}
+
+BASE="$HOME/.apt/usr/lib/x86_64-linux-gnu"
+
+add_libdir "$BASE/pulseaudio"
+add_libdir "$BASE/blas"
+add_libdir "$BASE/lapack"

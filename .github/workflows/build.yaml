@@ -1,0 +1,32 @@
+name: build-ffmpeg-runtime
+
+on:
+  workflow_dispatch:
+    inputs:
+      ffmpeg_tag:
+        description: "FFmpeg tag (e.g. n6.1.1)"
+        required: true
+        default: "n6.1.1"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build ffmpeg (LGPL-ish)
+        run: |
+          chmod +x scripts/build_ffmpeg.sh
+          sudo bash scripts/build_ffmpeg.sh "${{ inputs.ffmpeg_tag }}"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "heroku24-${{ inputs.ffmpeg_tag }}"
+          name: "heroku24-${{ inputs.ffmpeg_tag }}"
+          files: |
+            /work/ffmpeg-runtime-heroku24-x86_64.tar.gz
+            /work/ffmpeg-runtime-heroku24-x86_64.tar.gz.sha256

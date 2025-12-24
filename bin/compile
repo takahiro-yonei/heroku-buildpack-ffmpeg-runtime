@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir> <env-dir>
 
+DEFAULT_APTFILE="$BP_DIR/defaults/Aptfile"
+APP_APTFILE="$BUILD_DIR/Aptfile"
+
+if [ ! -f "$APP_APTFILE" ]; then
+  echo "No Aptfile in app; using buildpack default Aptfile"
+  cp "$DEFAULT_APTFILE" "$APP_APTFILE"
+fi
+
 # fail fast
 set -eo pipefail
 

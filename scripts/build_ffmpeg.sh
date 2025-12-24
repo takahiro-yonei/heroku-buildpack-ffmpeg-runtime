@@ -14,7 +14,7 @@ cd /work
 
 # ffmpeg公式のタグを取る（ミラーでもOK）
 curl -fsSL "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/${FFMPEG_VERSION}.tar.gz" | tar -xz
-cd "FFmpeg-${FFMPEG_VERSION#n}"
+cd "FFmpeg-${FFMPEG_VERSION}"
 
 ./configure \
   --prefix="$PREFIX" \

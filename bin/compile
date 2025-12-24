@@ -28,7 +28,7 @@ if [ -z "$FFMPEG_RELEASE_TAG" ]; then
   exit 1
 fi
 
-ASSET="ffmpeg-lgpl-heroku24-x86_64.tar.gz"
+ASSET="ffmpeg-runtime-heroku24-x86_64.tar.gz"
 URL="https://github.com/${GITHUB_REPO}/releases/download/${FFMPEG_RELEASE_TAG}/${ASSET}"
 
 echo "-----> Installing LGPL ffmpeg"

@@ -2,28 +2,44 @@
 set -euo pipefail
 
 BUILD_DIR="$1"
+CACHE_DIR="$2"
+ENV_DIR="$3"
 
-# ===== 設定（Heroku config var で渡す） =====
-: "${GITHUB_REPO:?Set GITHUB_REPO like takahiro-yonei/heroku-buildpack-ffmpeg-runtime}"
-: "${FFMPEG_RELEASE_TAG:?Set FFMPEG_RELEASE_TAG like heroku24-n6.1.1}"
+# ENV_DIR から読むヘルパー
+read_env() {
+  local key="$1"
+  local path="$ENV_DIR/$key"
+  if [ -f "$path" ]; then
+    cat "$path"
+  else
+    echo ""
+  fi
+}
+
+# config var は ENV_DIR から取得（なければ空）
+GITHUB_REPO="$(read_env GITHUB_REPO)"
+FFMPEG_RELEASE_TAG="$(read_env FFMPEG_RELEASE_TAG)"
+
+# ついでにデフォルト（事故防止）
+GITHUB_REPO="${GITHUB_REPO:-takahiro-yonei/heroku-buildpack-ffmpeg-runtime}"
+
+if [ -z "$FFMPEG_RELEASE_TAG" ]; then
+  echo " !     FFMPEG_RELEASE_TAG is required (e.g. heroku24-n6.1.1)" >&2
+  exit 1
+fi
 
 ASSET="ffmpeg-lgpl-heroku24-x86_64.tar.gz"
 URL="https://github.com/${GITHUB_REPO}/releases/download/${FFMPEG_RELEASE_TAG}/${ASSET}"
 
-echo "-----> Installing LGPL ffmpeg from GitHub Releases"
+echo "-----> Installing LGPL ffmpeg"
 echo "       $URL"
 
-# ===== 展開 =====
 mkdir -p "$BUILD_DIR/.ffmpeg"
 curl -fsSL "$URL" | tar -xz -C "$BUILD_DIR/.ffmpeg" --strip-components=1
 
-# ===== runtime 環境変数 =====
 mkdir -p "$BUILD_DIR/.profile.d"
 cat > "$BUILD_DIR/.profile.d/010_ffmpeg.sh" <<'EOF'
 export PATH="$HOME/.ffmpeg/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/.ffmpeg/lib:${LD_LIBRARY_PATH:-}"
 EOF
-
 chmod +x "$BUILD_DIR/.profile.d/010_ffmpeg.sh"
-
-echo "-----> ffmpeg installed"

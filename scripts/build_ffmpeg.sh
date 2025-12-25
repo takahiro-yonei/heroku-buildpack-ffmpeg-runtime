@@ -33,6 +33,7 @@ cd "FFmpeg-${FFMPEG_VERSION}"
   --enable-muxer=null \
   --enable-parser=mpegaudio \
   --enable-decoder=mp3 \
+  --enable-encoder=pcm_s16le \
   --enable-filter=silencedetect
 
 make -j"$(nproc)"

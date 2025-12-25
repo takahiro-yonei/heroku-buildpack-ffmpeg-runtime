@@ -24,18 +24,14 @@ cd "FFmpeg-${FFMPEG_VERSION}"
   --disable-static \
   --disable-debug \
   --disable-doc \
-  --disable-everything \
+  --disable-programs \
   --enable-ffmpeg \
   --enable-ffprobe \
+  --disable-autodetect \
   --enable-protocol=file \
   --enable-demuxer=mp3 \
-  --enable-muxer=mp3 \
-  --enable-muxer=null \
   --enable-parser=mpegaudio \
   --enable-decoder=mp3 \
-  --enable-encoder=pcm_s16le \
-  --enable-filter=aformat \
-  --enable-filter=asetnsamples \
   --enable-filter=silencedetect
 
 make -j"$(nproc)"

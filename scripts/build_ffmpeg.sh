@@ -30,6 +30,7 @@ cd "FFmpeg-${FFMPEG_VERSION}"
   --enable-protocol=file \
   --enable-demuxer=mp3 \
   --enable-muxer=mp3 \
+  --enable-muxer=null \
   --enable-parser=mpegaudio \
   --enable-decoder=mp3 \
   --enable-filter=silencedetect

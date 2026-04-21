@@ -30,9 +30,16 @@ cd "FFmpeg-${FFMPEG_VERSION}"
   --disable-autodetect \
   --enable-protocol=file \
   --enable-demuxer=mp3 \
+  --enable-demuxer=wav \
   --enable-parser=mpegaudio \
   --enable-decoder=mp3 \
-  --enable-filter=silencedetect
+  --enable-decoder=pcm_mulaw \
+  --enable-decoder=pcm_alaw \
+  --enable-decoder=pcm_s16le \
+  --enable-muxer=flac \
+  --enable-encoder=flac \
+  --enable-filter=silencedetect \
+  --enable-filter=aresample
 
 make -j"$(nproc)"
 make install
